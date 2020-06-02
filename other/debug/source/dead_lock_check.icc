@@ -1,0 +1,26 @@
+inline dead_lock_check::dead_lock_check() {
+	InitializeCriticalSection(&_cri);
+}
+
+inline dead_lock_check::~dead_lock_check() {
+	DeleteCriticalSection(&_cri);
+}
+
+inline void dead_lock_check::have(CRITICAL_SECTION* cri_) {
+	EnterCriticalSection(&_cri);
+	auto id = GetCurrentThreadId();
+	// 清除请求锁
+	_request_lock.erase(id);
+	// 加入占有锁
+	_thread_lock[id].push_back(cri_);
+	//printf("当前线程: %ld, 占有锁 %I64d\n", GetCurrentThreadId(), reinterpret_cast<uintptr_t>(cri_));
+	LeaveCriticalSection(&_cri);
+}
+
+inline void dead_lock_check::discard(CRITICAL_SECTION* cri_) {
+	EnterCriticalSection(&_cri);
+	// 退出占有锁
+	_thread_lock.erase(GetCurrentThreadId());
+	//printf("当前线程: %ld, 释放锁 %I64d\n", GetCurrentThreadId(), reinterpret_cast<uintptr_t>(cri_));
+	LeaveCriticalSection(&_cri);
+}

@@ -1,0 +1,30 @@
+inline critical::critical(CRITICAL_SECTION* crit) {
+	_crit = crit;
+	EnterCriticalSection(_crit);
+}
+
+inline critical::~critical() {
+	LeaveCriticalSection(_crit);
+}
+
+inline safe_critical::safe_critical(debug::dead_lock_check& check, CRITICAL_SECTION* cri_) :
+#ifdef _DEBUG
+	_check(check),
+#endif
+	_cri(cri_)
+{
+#ifdef _DEBUG
+	_check.request(_cri);
+	EnterCriticalSection(_cri);
+	_check.have(_cri);
+#else
+	EnterCriticalSection(_cri);
+#endif
+}
+
+inline safe_critical::~safe_critical() {
+	LeaveCriticalSection(_cri);
+#ifdef _DEBUG
+	_check.discard(_cri);
+#endif
+}

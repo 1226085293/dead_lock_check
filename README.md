@@ -4,9 +4,7 @@
 **如果要在release版本中避免死锁，请把safe_critical类的构造函数改为如下代码， 并且取消掉析构函数内的预处理宏判断**
 ```cpp
 inline safe_critical::safe_critical(debug::dead_lock_check& check, CRITICAL_SECTION* cri_) :
-#ifdef _DEBUG
 	_check(check),
-#endif
 	_cri(cri_)
 {
 #ifdef _DEBUG

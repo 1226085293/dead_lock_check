@@ -1,5 +1,5 @@
 # dead_lock_check
-死锁检测模块，可为您的项目在debug中检测死锁并处理，在不要求极致性能的情况下甚至可以嵌入到release版本中。代码尽量精简易读
+死锁检测模块，可为您的项目在debug中检测死锁并处理，在不要求极致性能的情况下可以嵌入到release版本中。代码尽量精简易读
 
 **使用代码，例：**
 ```cpp
@@ -75,8 +75,3 @@ inline safe_critical::safe_critical(debug::dead_lock_check& check, CRITICAL_SECT
 }
 
 ```
-
-
-如果对您有帮助请给个星星，谢谢。
-
-If it helps you, please give a star, thank you.
